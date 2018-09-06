@@ -1,0 +1,9 @@
+body{
+    padding: 0;
+    padding-top: 20%;
+    padding-left: 18%;
+    padding-right: 0;
+    margin: 0;
+    font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
+    background-image: url("../../assets/images/tiny-squares.png");
+    background-repeat: repeat;

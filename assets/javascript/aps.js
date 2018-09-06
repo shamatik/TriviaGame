@@ -8,6 +8,9 @@ var triviaGame  = {
     "startGame": false,
     "pushDone": false,
     "questionFlag": false,
+    "answerEvalFlag": false,
+    "pastQuestions": [],
+    "intervalId": 0,
     "goodAns": 0,
     "badAns": 0,
     "score": 0,
@@ -39,10 +42,83 @@ var triviaGame  = {
     },
 
     "rndmSelectfn": function(){
-        if(triviaGame.pushDone && !triviaGame.questionFlag{
-        var random = (Math.floor(Math.random*triviaGame.questArr.length));
-            
+        if (this.pushDone && !this.questionFlag) {
+        
+            do {
+                flag = false;
+                var random = Math.floor(Math.random() * triviaGame.questArr.length);
+                var quest = triviaGame.questArr[random];
+                
+                if (triviaGame.pastQuestions.indexOf(quest) == -1) {
+                    triviaGame.pastQuestions.push(quest);
+                    flag = true;
+                } 
+            } while (!flag);
+            triviaGame.questionFlag = true;
+            triviaGame.answerEvalFlag = false;
         }
+        this.timer(15);
+        console.log("question timer");
+    },
+
+    "answerEval": function(answer){ 
+        if (triviaGame.pushDone && triviaGame.questionFlag && !triviaGame.answerEvalFlag && triviaGame.pastQuestions[triviaGame.pastQuestions.length-1].rightAns==answer) {
+            triviaGame.questionFlag = false;
+            triviaGame.answerEvalFlag = true;
+            console.log("chido");
+        }
+        else{
+            console.log("alv!");
+        }
+    this.stopTimer();
+    this.finishFn();
+    },
+
+    "timer": function(val){
+        var number = val;
+
+        
+        function run() {
+        triviaGame.intervalId = setInterval(decrement, 1000);
+        }
+            function decrement() {
+            number--;
+                if (number === 0 && triviaGame.questionFlag) {
+                    triviaGame.stopTimer();                   
+                    triviaGame.finishFn();
+                    triviaGame.questionFlag = false;
+                    triviaGame.answerEvalFlag = true;         
+                }
+                else if (number === 0 && triviaGame.answerEval){
+                    triviaGame.stopTimer();
+                    triviaGame.continue();
+                }
+                console.log(number);
+            } 
+            run();
+    },
+
+    "stopTimer": function(){
+        clearInterval(triviaGame.intervalId);
+    },
+
+
+
+    "finishFn": function (){
+        if (this.questArr.length == this.pastQuestions.length) {
+            alert("Wel Done" + " " + this.goodAns + " " + this.badAns);
+        }
+        else{
+            this.timer(5);
+            console.log("continue timer");
+        }
+     },
+
+
+   "continue": function () {
+    this.stopTimer();
+    this.rndmSelectfn();
     },
 
 };
+
