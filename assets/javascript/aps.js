@@ -67,14 +67,25 @@ var dummyGame = {
                     
                     console.log("chido");
                     triviaGame.goodAns ++;
-                    triviaGame.score++;
+                    
                     $("#score").html(triviaGame.score);
+                    var target1 = $(".holder");
+                    target1.empty();
+                    var rightAnsBox = $("<div>");
+                    rightAnsBox.text("You are correct!");
+                    target1.append(rightAnsBox);
+
                 }
                 else{
                     console.log("alv!");
                     triviaGame.badAns ++;
-                    triviaGame.score --;
+                    
                     $("#score").html(triviaGame.score);
+                    var target1 = $(".holder");
+                    target1.empty();
+                    var wrongAnsBox = $("<div>");
+                    wrongAnsBox.text("The correct answer is: "+triviaGame.pastQuestions[triviaGame.pastQuestions.length-1].rightAns);
+                    target1.append(wrongAnsBox);
                     
                 }
                 
@@ -99,7 +110,8 @@ var dummyGame = {
                         triviaGame.stopTimer();                   
                         triviaGame.finishFn();
                         triviaGame.questionFlag = false;
-                        triviaGame.answerEvalFlag = true;         
+                        triviaGame.answerEvalFlag = true;
+                        triviaGame.badAns ++;         
                     }
                     else if (number === 0 && triviaGame.answerEval){
                         triviaGame.stopTimer();
@@ -119,12 +131,19 @@ var dummyGame = {
     
         "finishFn": function (){
             if (this.questArr.length == this.pastQuestions.length) {
+                triviaGame.score = Math.floor((triviaGame.goodAns/(triviaGame.badAns+triviaGame.goodAns))*100); 
                 //alert("Wel Done" + " " + this.goodAns + " " + this.badAns);
                 var target1 = $(".holder");
                 target1.empty();
                 var triviaScore = $("<h3>");
-                triviaScore.text("Score: "+triviaGame.score);
+                triviaScore.text("Score: "+triviaGame.score + "%");
                 target1.append(triviaScore);
+                var triviaScore2 = $("<h3>");
+                triviaScore2.text("Good answers: "+triviaGame.goodAns);
+                target1.append(triviaScore2);
+                var triviaScore3 = $("<h3>");
+                triviaScore3.text("Bad answers: "+triviaGame.badAns);
+                target1.append(triviaScore3);
 
             }
             else{
@@ -173,11 +192,12 @@ var dummyGame = {
                 var triviaAnswer = $('<div>');
                 triviaAnswer.text(randArr[i]);
                 triviaAnswer.attr('class', "col-m-4 button align");
+                triviaAnswer.attr('id','bttn2')
                 target1.append(triviaAnswer);
 
                
             }
-            $(document).delegate('.button', 'click', function(event){
+            $(document).delegate('#bttn2', 'click', function(event){
                 console.log(event);
                 console.log(event.currentTarget.innerText);
                 var userAns = event.currentTarget.innerText;
