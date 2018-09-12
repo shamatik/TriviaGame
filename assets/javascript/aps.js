@@ -62,16 +62,28 @@ var dummyGame = {
         },
     
         "answerEval": function(answer){ 
-            if (triviaGame.pushDone && triviaGame.questionFlag && !triviaGame.answerEvalFlag && triviaGame.pastQuestions[triviaGame.pastQuestions.length-1].rightAns==answer) {
-                triviaGame.questionFlag = false;
-                triviaGame.answerEvalFlag = true;
-                console.log("chido");
-            }
-            else{
-                console.log("alv!");
-            }
-        this.stopTimer();
-        this.finishFn();
+            if (triviaGame.pushDone && triviaGame.questionFlag && !triviaGame.answerEvalFlag) {
+                    if(triviaGame.pastQuestions[triviaGame.pastQuestions.length-1].rightAns==answer){
+                    
+                    console.log("chido");
+                    triviaGame.goodAns ++;
+                    triviaGame.score++;
+                    $("#score").html(triviaGame.score);
+                }
+                else{
+                    console.log("alv!");
+                    triviaGame.badAns ++;
+                    triviaGame.score --;
+                    $("#score").html(triviaGame.score);
+                    
+                }
+                
+                    this.stopTimer();
+                    this.finishFn();
+                    triviaGame.questionFlag = false;
+                    triviaGame.answerEvalFlag = true;
+            
+                }
         },
     
         "timer": function(val){
@@ -107,18 +119,79 @@ var dummyGame = {
     
         "finishFn": function (){
             if (this.questArr.length == this.pastQuestions.length) {
-                alert("Wel Done" + " " + this.goodAns + " " + this.badAns);
+                //alert("Wel Done" + " " + this.goodAns + " " + this.badAns);
+                var target1 = $(".holder");
+                target1.empty();
+                var triviaScore = $("<h3>");
+                triviaScore.text("Score: "+triviaGame.score);
+                target1.append(triviaScore);
+
             }
             else{
                 this.timer(5);
                 console.log("continue timer");
+                
+                var target1 = $(".holder");
+                
+                var continueButton = $('<div>');
+                continueButton.attr('class', "col-m-4 button align");
+                continueButton.attr('id', "button1");
+                continueButton.text("Continue?");
+                target1.append(continueButton);
+                $('#button1').on('click', function(event){
+                    triviaGame.continue();
+                });
+              
             }
          },
+
+         "questionDomGen": function() {
+            var target1 = $(".holder");
+            target1.empty();
+            var randArr = [];
+            var ansArr = triviaGame.pastQuestions[triviaGame.pastQuestions.length-1].wrongAns;
+            ansArr.push(triviaGame.pastQuestions[triviaGame.pastQuestions.length-1].rightAns);
+            console.log(ansArr);
+          
+            var triviaQuestion = $("<h3>");
+            triviaQuestion.text(triviaGame.pastQuestions[triviaGame.pastQuestions.length-1].questionText);
+            target1.append(triviaQuestion);
+          
+    
+            for(var i = 0; i < 4; i++) {
+                
+                do {
+                    var flag1 = false;
+                    var rand = Math.floor(Math.random() * 4);
+                    var select = ansArr[rand];
+                    
+                    if (randArr.indexOf(select) == -1) {
+                        randArr.push(select);
+                        flag1 = true;
+                    } 
+                } while (!flag1);
+                var triviaAnswer = $('<div>');
+                triviaAnswer.text(randArr[i]);
+                triviaAnswer.attr('class', "col-m-4 button align");
+                target1.append(triviaAnswer);
+
+               
+            }
+            $(document).delegate('.button', 'click', function(event){
+                console.log(event);
+                console.log(event.currentTarget.innerText);
+                var userAns = event.currentTarget.innerText;
+                triviaGame.answerEval(userAns);
+            });
+            console.log(randArr);
+
+        },
     
     
        "continue": function () {
         this.stopTimer();
         this.rndmSelectfn();
+        this.questionDomGen();
         },
     
         "startButton": function() {
@@ -135,14 +208,16 @@ var dummyGame = {
                 //console.log(event);
                 triviaGame.pushFn();
                 triviaGame.rndmSelectfn();
-                //triviaGame.questionDomGen();
+                triviaGame.questionDomGen();
             });
-    },
+        },
+
+       
     }; 
 
     $(document).ready(function() {
         triviaGame.startButton();
-    
+        
         //$("#question").html($(triviaGame.pastQuestions).text());
      });
     
