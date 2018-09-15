@@ -21,10 +21,12 @@ var dummyGame = {
         },
     
         "questions": [
-            {"question": "my age?", "rightAns1": "28", "wrongAns1":["12", "13", "100"]},
-            {"question": "your age?", "rightAns1": "12", "wrongAns1":["28", "13", "100"]},
-            {"question": "our age?", "rightAns1": "100", "wrongAns1":["12", "13", "28"]},
-        ],
+            {"question": "Who invented the Stratocaster?", "rightAns1": "Fender", "wrongAns1":["Gibson", "Ibanez", "God"]},
+            {"question": "Who invented the Les Paul?", "rightAns1": "Gibson", "wrongAns1":["Fender", "Ibanez", "God!"]},
+            {"question": "Who uses a Telecaster?", "rightAns1": "Bruce Springteen", "wrongAns1":["Slash", "God", "Kurt Cobain"]},
+            {"question": "Who uses an SG?", "rightAns1": "Angus Young", "wrongAns1":["Slash", "Tom Morello", "The Edge"]},
+            {"question": "Where's Ibanez From?", "rightAns1": "Japan", "wrongAns1":["Usa", "China", "Uk"]},
+            {"question": "Who uses a Stratocaster?", "rightAns1": "David Gilmour", "wrongAns1":["Tom Morello", "God", "Kurt Cobain"]},        ],
     
         "pushFn": function() {
             if (!this.pushDone) {
